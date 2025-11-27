@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Cocoa App — Bandeja de sugerencias</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    main {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    /* TARJETA FORMULARIO */
+    .sug-box {
+      background: #fff;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-left: 6px solid #ff000f;
+    }
+
+    label {
+      font-weight: 600;
+      color: #222;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #ff000f;
+      box-shadow: 0 0 6px rgba(255,0,15,0.35);
+    }
+
+    .primary {
+      background: #ff000f;
+      border: none;
+      padding: 14px;
+      color: #fff;
+      border-radius: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: .3s;
+    }
+
+    .primary:hover {
+      background: #cc000c;
+      transform: scale(1.05);
+    }
+
+    #clearComments {
+      background: #046635;
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: .3s;
+    }
+    #clearComments:hover {
+      background: #034d27;
+      transform: scale(1.05);
+    }
+
+    /* LISTA DE COMENTARIOS */
+    .comment {
+      background: #fff;
+      padding: 16px;
+      border-radius: 14px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      border-left: 6px solid #046635;
+    }
+
+    .stars {
+      float: right;
+      font-size: 18px;
+      color: #ff000f;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo">Cocoa App</div>
+    <nav>
+      <a href="inicio.html">Inicio</a>
+      <a href="redes.html">Redes</a>
+      <a href="bandeja.html" class="active">Bandeja de sugerencias</a>
+      <a href="juego.html">Juego</a>
+      <a href="tienda.html">Tienda</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Bandeja de sugerencias</h1>
+    <p>Califica con estrellas y deja tu comentario.</p>
+
+    <div class="sug-box">
+      <label>Nombre (opcional)</label>
+      <input id="name" placeholder="Tu nombre">
+
+      <label>Calificación</label>
+      <select id="stars">
+        <option value="5">5 Estrellas ⭐⭐⭐⭐⭐</option>
+        <option value="4">4 Estrellas ⭐⭐⭐⭐</option>
+        <option value="3">3 Estrellas ⭐⭐⭐</option>
+        <option value="2">2 Estrellas ⭐⭐</option>
+        <option value="1">1 Estrella ⭐</option>
+      </select>
+
+      <label>Comentario</label>
+      <textarea id="comment" rows="5" placeholder="Escribe tu comentario..."></textarea>
+
+      <div style="display:flex; gap:12px; margin-top:10px;">
+        <button class="primary" id="submitComment">Enviar comentario</button>
+        <button id="clearComments">Borrar todos</button>
+      </div>
+    </div>
+
+    <div id="commentsList" style="margin-top:25px"></div>
+  </main>
+
+  <footer>© DULCE ELITE</footer>
+
+  <script>
+    const commentsKey = 'chocorize_comments_v2';
+
+    function loadComments(){ return JSON.parse(localStorage.getItem(commentsKey) || '[]') }
+    function saveComments(list){ localStorage.setItem(commentsKey, JSON.stringify(list)); renderComments(); }
+
+    function renderComments(){
+      const c = loadComments();
+      const container = document.getElementById('commentsList');
+      if(c.length===0){
+        container.innerHTML='<p style="opacity:0.7;">No hay comentarios aún.</p>';
+        return;
+      }
+
+      container.innerHTML = c.map(item => {
+        const stars = '★'.repeat(item.stars) + '☆'.repeat(5-item.stars);
+        return `
+        <div class="comment">
+          <strong>${escapeHtml(item.name||'Anon')}</strong>
+          <span class="stars">${stars}</span>
+          <div style="margin-top:10px">${escapeHtml(item.text)}</div>
+        </div>`;
+      }).join('');
+    }
+
+    function escapeHtml(s){
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    }
+
+    document.getElementById('submitComment').addEventListener('click',()=>{
+      const name = document.getElementById('name').value.trim();
+      const stars = parseInt(document.getElementById('stars').value,10);
+      const text = document.getElementById('comment').value.trim();
+      if(!text){ alert('Escribe un comentario'); return }
+
+      const list = loadComments();
+      list.unshift({name,stars,text,ts:Date.now()});
+      saveComments(list);
+      document.getElementById('comment').value='';
+    });
+
+    document.getElementById('clearComments').addEventListener('click',()=>{
+      if(!confirm('¿Seguro que quieres borrar todos los comentarios?')) return;
+      localStorage.removeItem(commentsKey);
+      renderComments();
+    });
+
+    renderComments();
+  </script>
+</body>
+</html>

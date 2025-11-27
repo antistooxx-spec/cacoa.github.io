@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Cocoa App — Tienda</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Tipografía similar al estilo del logo -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+      color: #000;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 42px;
+      font-weight: 800;
+      color: #ff000f;
+      margin-top: 20px;
+    }
+
+    p {
+      text-align: center;
+      font-size: 18px;
+    }
+
+    /* GRID DE PRODUCTOS */
+    .products {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 40px auto;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      width: 260px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.16);
+      padding: 18px;
+      text-align: center;
+      border: 4px solid #046635;
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 14px;
+    }
+
+    .card h3 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #046635;
+      margin: 12px 0 0;
+    }
+
+    .card p {
+      font-size: 18px;
+      margin: 6px 0;
+      color: #333;
+    }
+
+    .card input {
+      width: 80px;
+      padding: 6px;
+      border-radius: 6px;
+      border: 2px solid #000;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .card button {
+      width: 100%;
+      padding: 12px;
+      background: #ff000f;
+      color: #fff;
+      border: none;
+      font-weight: 700;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+
+    .card button:hover {
+      background: #c8000c;
+    }
+
+    /* CARRITO */
+    #cartSummary {
+      margin: 40px auto;
+      width: 90%;
+      max-width: 420px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 18px;
+      border: 4px solid #ff000f;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    #cartSummary h3{
+      text-align:center;
+      color:#ff000f;
+      font-size:32px;
+      font-weight:800;
+    }
+
+    #cartItems div {
+      background:#f6f6f6;
+      padding:10px;
+      margin:8px 0;
+      border-radius:6px;
+      font-size:16px;
+      border-left:6px solid #046635;
+    }
+
+    #cartItems button {
+      background:black;
+      color:white;
+      border:none;
+      padding:4px 10px;
+      border-radius:5px;
+      font-size:14px;
+      float:right;
+      cursor:pointer;
+    }
+
+    #cartTotal {
+      margin-top:10px;
+      font-weight:700;
+      font-size:20px;
+      text-align:center;
+      color:#046635;
+    }
+
+    #checkout input {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0;
+      border-radius: 8px;
+      border: 2px solid #000;
+      font-size: 16px;
+    }
+
+    #checkout button {
+      width: 100%;
+      padding: 12px;
+      background: #046635;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 700;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    #checkout button:hover {
+      background: #034f27;
+    }
+
+    #cartSummary > button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 12px;
+      background: black;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+      font-weight: 700;
+      background: #ff000f;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Cocoa App</div>
+    <nav>
+      <a href="inicio.html">Inicio</a>
+      <a href="redes.html">Redes</a>
+      <a href="bandeja.html">Bandeja</a>
+      <a href="juego.html">Juego</a>
+      <a href="tienda.html" class="active">Tienda</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Tienda</h1>
+    <p>Compra tu chocolate en presentación de tableta o caja.</p>
+
+    <div class="products">
+      <div class="card">
+        <img src="cajanueva.jpg" alt="Tableta Cocoa">
+        <h3>Tableta Chocorize</h3>
+        <p>1 unidad · $100</p>
+        <label>Cantidad</label>
+        <input type="number" min="1" value="1" id="qty_tableta">
+        <button onclick="addToCart('tableta')">Agregar al carrito</button>
+      </div>
+
+      <div class="card">
+        <img src="enpaqwuegrande.jpg" alt="Caja Cocoa">
+        <h3>Caja Chocorize</h3>
+        <p>10 unidades · $900</p>
+        <label>Cantidad</label>
+        <input type="number" min="1" value="1" id="qty_caja">
+        <button onclick="addToCart('caja')">Agregar al carrito</button>
+      </div>
+    </div>
+
+    <div id="cartSummary">
+      <h3>Carrito</h3>
+      <div id="cartItems">No hay productos en el carrito.</div>
+      <div id="cartTotal"></div>
+
+      <div id="checkout" style="display:none;">
+        <h4>Datos de envío</h4>
+        <input id="orderName" placeholder="Nombre completo">
+        <input id="orderState" placeholder="Estado">
+        <input id="orderPostal" placeholder="Código postal">
+        <input id="orderPhone" placeholder="Teléfono">
+
+        <button onclick="placeOrder()">Pagar / Enviar pedido</button>
+      </div>
+
+      <button onclick="clearCart()">🗑️ Vaciar carrito</button>
+    </div>
+  </main>
+
+  <footer>© DULCE ELITE</footer>
+
+  <!-- Tu script original (no lo modifiqué) -->
+  <script>
+    const catalog = {
+      tableta: {title:'Tableta Cacoa', price:100},
+      caja: {title:'Caja Cacoa (10)', price:900}
+    };
+    const cartKey = 'chocorize_cart_v2';
+
+    function loadCart(){ return JSON.parse(localStorage.getItem(cartKey) || '{}') }
+    function saveCart(c){ localStorage.setItem(cartKey, JSON.stringify(c)); renderCart(); }
+
+    function addToCart(sku){
+      const qtyInput = document.getElementById('qty_' + sku);
+      let qty = parseInt(qtyInput.value||'1',10); if(qty<1) qty=1;
+      const c = loadCart();
+      c[sku] = (c[sku] || 0) + qty;
+      saveCart(c);
+      alert('Añadido al carrito');
+    }
+
+    function renderCart(){
+      const c = loadCart(); const keys = Object.keys(c);
+      const itemsDiv = document.getElementById('cartItems');
+      const totalDiv = document.getElementById('cartTotal');
+      if(keys.length === 0){
+        itemsDiv.innerText = 'No hay productos en el carrito.';
+        totalDiv.innerText='';
+        document.getElementById('checkout').style.display='none';
+        return;
+      }
+      let total = 0;
+      itemsDiv.innerHTML = keys.map(k => {
+        const line = `${catalog[k].title} x ${c[k]} = $${catalog[k].price * c[k]}`;
+        total += catalog[k].price * c[k];
+        return `<div>${line} <button onclick="removeOne('${k}')">-1</button></div>`;
+      }).join('');
+      totalDiv.innerText = 'Total: $' + total;
+      document.getElementById('checkout').style.display = 'block';
+    }
+
+    function removeOne(sku){
+      const c = loadCart();
+      if(!c[sku]) return;
+      c[sku] = c[sku] - 1;
+      if(c[sku] <= 0) delete c[sku];
+      saveCart(c);
+    }
+
+    function clearCart(){
+      if(!confirm('¿Seguro que quieres vaciar el carrito?')) return;
+      localStorage.removeItem(cartKey);
+      renderCart();
+    }
+
+    function placeOrder(){
+      const c = loadCart();
+      if(Object.keys(c).length === 0){ alert('Carrito vacío'); return; }
+      const name = document.getElementById('orderName').value || 'Sin nombre';
+      const state = document.getElementById('orderState').value || 'No proporcionado';
+      const postal = document.getElementById('orderPostal').value || 'No proporcionado';
+      const phone = document.getElementById('orderPhone').value || 'No proporcionado';
+      let lines = []; let total = 0;
+      Object.keys(c).forEach(k => {
+        lines.push(`${catalog[k].title} x ${c[k]}`);
+        total += catalog[k].price * c[k];
+      });
+
+      const body = encodeURIComponent(
+        `Nuevo pedido Chocorize\n\nNombre: ${name}\nTeléfono: ${phone}\nEstado: ${state}\nCódigo postal: ${postal}\n\nProductos:\n${lines.join('\n')}\n\nTotal: $${total}\n\nGracias por tu compra`
+      );
+
+      location.href = `mailto:antistooxx@gmail.com?subject=${encodeURIComponent('Nuevo pedido Chocorize')}&body=${body}`;
+    }
+
+    renderCart();
+  </script>
+
+</body>
+</html>
